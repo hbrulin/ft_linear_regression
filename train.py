@@ -59,8 +59,10 @@ def save(theta_0, theta_1) :
 #pass file as arg
 def main():
     [kms, prices, m] = get_data('data.csv')
+    #normalize
     kms_norm = [float(kms[i])/max(kms) for i in range(m)]
     prices_norm = [float(prices[i])/max(prices) for i in range(m)]
+    #comments
     [theta_0, theta_1] = train(kms_norm, prices_norm, m)
     #denormalize
     theta_0 = theta_0 * max(prices)
