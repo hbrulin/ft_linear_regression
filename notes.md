@@ -2,6 +2,8 @@
 #install
 brew install python
 pip3 install pandas
+pip3 install matplotlib
+
 have a malefile or something
 
 #Linear function : 

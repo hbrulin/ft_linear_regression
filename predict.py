@@ -1,17 +1,9 @@
 import sys
 import pandas as pd
 
-def get_data(filename) :
-    df = pd.read_csv(filename)
-    #print(df)
-    theta_0 = float(df.iloc[0:len(df),0][0])
-    theta_1 = float(df.iloc[0:len(df),0][0])
-    return [theta_0, theta_1]
-
 def get_price(km, theta_0, theta_1) :
     return theta_0 + (theta_1 * km)
 
-#error checking
 def main():
     km_correct = False
     while km_correct == False :
@@ -24,11 +16,10 @@ def main():
                 print("Mileage is negative")
         except :
             print("Not a number")
-    [theta_0, theta_1] = get_data('./thetas.csv')
+    with open('thetas.txt', 'r') as f:
+        theta_0, theta_1 = [float(x) for x in next(f).split()]
     estimated_price = get_price(km, theta_0, theta_1)
-    print(estimated_price)
-    
-
+    print ("Estimated price is: %f" %estimated_price)
 
 if __name__ == "__main__":
     main()
