@@ -41,7 +41,7 @@ def train(kms, prices, m):
     print(initial_theta_1)
     tmp_theta_0 = initial_theta_0
     tmp_theta_1 = initial_theta_1   
-    for i in range(30): #change?
+    for i in range(2000): #change?
         [theta_0, theta_1] = get_thetas(tmp_theta_0, tmp_theta_1, kms, prices, m)
         tmp_theta_0 = theta_0
         tmp_theta_1 = theta_1
@@ -59,7 +59,12 @@ def save(theta_0, theta_1) :
 #pass file as arg
 def main():
     [kms, prices, m] = get_data('data.csv')
-    [theta_0, theta_1] = train(kms, prices, m)
+    kms_norm = [float(kms[i])/max(kms) for i in range(m)]
+    prices_norm = [float(prices[i])/max(prices) for i in range(m)]
+    [theta_0, theta_1] = train(kms_norm, prices_norm, m)
+    #denormalize
+    theta_0 = theta_0 * max(prices)
+    theta_1 = theta_1 * (max(prices) / max(kms))
     print("main")
     print(theta_0)
     print(theta_1)
