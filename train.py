@@ -12,7 +12,7 @@ def plot(kms, prices, theta_0, theta_1):
     plt.xlabel('Kms')
     plt.ylabel('Prices')
     function = theta_0 + theta_1 * kms
-    plt.plot(function, kms, color='red')
+    plt.plot(kms, function, color='red')
     plt.show()
 
 
