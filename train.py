@@ -7,6 +7,13 @@ learning_rate = 0.1
 initial_theta_0 = 0.0
 initial_theta_1 = 0.0
 
+def get_max(data) -> float:
+    tmp = 0
+    for nb in data:
+        if nb > tmp:
+            tmp = nb
+    return tmp
+
 def plot(kms, prices, theta_0, theta_1):
     plt.scatter(kms, prices)
     plt.xlabel('Kms')
@@ -14,7 +21,6 @@ def plot(kms, prices, theta_0, theta_1):
     function = theta_0 + theta_1 * kms
     plt.plot(kms, function, color='red')
     plt.show()
-
 
 def get_data(filename) :
     df = pd.read_csv(filename)
@@ -57,15 +63,15 @@ def main():
     [kms, prices, m] = get_data('data.csv')
 
     #normalize to bring data to same range between 0 and 1
-    kms_norm = [float(kms[i])/max(kms) for i in range(m)]
-    prices_norm = [float(prices[i])/max(prices) for i in range(m)]
+    kms_norm = [float(kms[i])/get_max(kms) for i in range(m)]
+    prices_norm = [float(prices[i])/get_max(prices) for i in range(m)]
 
     #launch train
     [theta_0, theta_1] = train(kms_norm, prices_norm, m)
 
     #denormalize
-    theta_0 = theta_0 * max(prices)
-    theta_1 = theta_1 * (max(prices) / max(kms))
+    theta_0 = theta_0 * get_max(prices)
+    theta_1 = theta_1 * (get_max(prices) / get_max(kms))
 
     #result
     print ("theta_0: %f, theta_1: %f" %(theta_0, theta_1))
