@@ -1,0 +1,4 @@
+./__pycache__
+./plots/predict_plot.png
+./plots/train_plot.png
+./thetas.txt
