@@ -60,7 +60,14 @@ def save(theta_0, theta_1) :
 
 def main():
     #load data
-    [kms, prices, m] = get_data('data.csv')
+    check_dataset = False
+    while check_dataset == False :
+        filename = input("Enter path to dataset: ")
+        try :
+            [kms, prices, m] = get_data(filename)
+            check_dataset = True
+        except :
+            print("Error: File does not exist or has wrong format")
 
     #normalize to bring data to same range between 0 and 1
     kms_norm = [float(kms[i])/get_max(kms) for i in range(m)]
