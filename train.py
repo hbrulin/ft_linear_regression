@@ -15,6 +15,7 @@ def get_max(data) -> float:
     return tmp
 
 def plot(kms, prices, theta_0, theta_1):
+    #print(kms)
     plt.scatter(kms, prices)
     plt.xlabel('Kms')
     plt.ylabel('Prices')
@@ -59,6 +60,11 @@ def save(theta_0, theta_1) :
         f.write("%f %f" %(theta_0, theta_1))
 
 def main():
+    #check args for plot
+    show_plot = False
+    if (len(sys.argv) > 2 and sys.argv[1] == "--plot") :
+        show_plot = True
+
     #load data
     check_dataset = False
     while check_dataset == False :
@@ -81,11 +87,14 @@ def main():
     theta_1 = theta_1 * (get_max(prices) / get_max(kms))
 
     #result
-    print ("theta_0: %f, theta_1: %f" %(theta_0, theta_1))
+    print ("Results : theta_0: %f, theta_1: %f" %(theta_0, theta_1))
 
-    #save and plot
+    #save
     save(theta_0, theta_1)
-    plot(kms, prices, theta_0, theta_1)
+
+    #plot
+    if show_plot == True:
+        plot(kms, prices, theta_0, theta_1)
 
 if __name__ == "__main__":
     main()
