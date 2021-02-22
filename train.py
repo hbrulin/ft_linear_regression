@@ -7,6 +7,7 @@ learning_rate = 0.1
 initial_theta_0 = 0.0
 initial_theta_1 = 0.0
 
+#utils
 def get_max(data) -> float:
     tmp = 0
     for nb in data:
@@ -21,6 +22,11 @@ def get_data(dataset) :
     m = len(X)
     return [X, Y, m]
 
+def save(theta_0, theta_1, nameX, nameY, dataset) :
+    with open('thetas.txt', 'w') as f:
+        f.write("%f %f\n%s %s\n%s" %(theta_0, theta_1, nameX, nameY, dataset))
+
+#linear_regression
 def calculate_gradiants(old_theta_0, old_theta_1, X, Y, m) :
     theta_0 = 0.0
     theta_1 = 0.0
@@ -46,9 +52,6 @@ def train(X, Y, m):
         tmp_theta_1 = theta_1
     return [tmp_theta_0, tmp_theta_1]  
 
-def save(theta_0, theta_1, nameX, nameY, dataset) :
-    with open('thetas.txt', 'w') as f:
-        f.write("%f %f\n%s %s\n%s" %(theta_0, theta_1, nameX, nameY, dataset))
 
 def main():
     #check args for plot
