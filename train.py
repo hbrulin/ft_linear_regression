@@ -1,6 +1,6 @@
 import sys
 import pandas as pd
-from classes import Plotter
+from plotter import Plotter
 
 #global vars
 learning_rate = 0.1

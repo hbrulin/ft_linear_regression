@@ -1,6 +1,6 @@
 import sys
 import pandas as pd
-from classes import Plotter
+from plotter import Plotter
 
 def get_data(dataset) :
     df = pd.read_csv(dataset)
@@ -18,10 +18,13 @@ def main():
         show_plot = True
 
     #open file
-    with open('thetas.txt', 'r') as f:
-        theta_0, theta_1 = [float(x) for x in next(f).split()]
-        nameX, nameY = [str(x) for x in next(f).split()]
-        dataset = [str(x) for x in next(f).split()]
+    try:
+        with open('thetas.txt', 'r') as f:
+            theta_0, theta_1 = [float(x) for x in next(f).split()]
+            nameX, nameY = [str(x) for x in next(f).split()]
+            dataset = [str(x) for x in next(f).split()]
+    except:
+        sys.exit("Error: Thetas don't exist. Run train.py first.")
     
     #ask for input X
     X_correct = False
