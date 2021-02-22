@@ -54,9 +54,9 @@ def train(X, Y, m):
         tmp_theta_1 = theta_1
     return [tmp_theta_0, tmp_theta_1]  
 
-def save(theta_0, theta_1) :
+def save(theta_0, theta_1, nameX, nameY) :
     with open('thetas.txt', 'w') as f:
-        f.write("%f %f" %(theta_0, theta_1))
+        f.write("%f %f\n%s %s" %(theta_0, theta_1, nameX, nameY))
 
 def main():
     #check args for plot
@@ -89,7 +89,7 @@ def main():
     print ("Results : theta_0: %f, theta_1: %f" %(theta_0, theta_1))
 
     #save
-    save(theta_0, theta_1)
+    save(theta_0, theta_1, X.name, Y.name)
 
     #plot
     if show_plot == True:
