@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if ! python3 -v COMMAND &> /dev/null
-then
-    echo "installing Python3..."
-    brew install python
-fi
 if ! python3 -c 'import pandas' 2>/dev/null 
 then
     echo "installing pandas..."
