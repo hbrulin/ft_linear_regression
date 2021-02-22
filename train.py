@@ -15,6 +15,13 @@ def get_max(data) -> float:
             tmp = nb
     return tmp
 
+def get_min(data) -> float:
+    tmp = 0
+    for nb in data:
+        if nb < tmp:
+            tmp = nb
+    return tmp
+
 def get_data(dataset) :
     df = pd.read_csv(dataset)
     X = df.iloc[0:len(df),0]#kms
@@ -70,15 +77,18 @@ def main():
             print("Error: File does not exist or has wrong format")
 
     #normalize to bring data to same range between 0 and 1
-    X_norm = [float(X[i])/get_max(X) for i in range(m)]
-    Y_norm = [float(Y[i])/get_max(Y) for i in range(m)]
+    #X_norm = [float(X[i])/get_max(X) for i in range(m)]
+    #Y_norm = [float(Y[i])/get_max(Y) for i in range(m)]
+    X_norm = (X.astype(float) - get_min(X)) / (get_max(X) - get_min(X))
 
     #launch train
-    [theta_0, theta_1] = train(X_norm, Y_norm, m)
+    [theta_0, theta_1] = train(X_norm, Y, m)
 
     #denormalize
-    theta_0 = theta_0 * get_max(Y)
-    theta_1 = theta_1 * (get_max(Y) / get_max(X))
+    #print(theta_0, get_max(Y))
+    #theta_0 = theta_0 * get_max(Y)
+    #print(theta_1, get_max(Y) / get_max(X))
+    #theta_1 = theta_1 * (get_max(Y) / get_max(X))
 
     #result
     print ("Results : theta_0: %f, theta_1: %f" %(theta_0, theta_1))

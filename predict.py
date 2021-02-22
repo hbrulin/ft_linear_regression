@@ -2,14 +2,29 @@ import sys
 import pandas as pd
 from plotter import Plotter
 
+def get_max(data) -> float:
+    tmp = 0
+    for nb in data:
+        if nb > tmp:
+            tmp = nb
+    return tmp
+
+def get_min(data) -> float:
+    tmp = 0
+    for nb in data:
+        if nb < tmp:
+            tmp = nb
+    return tmp
+
 def get_data(dataset) :
     df = pd.read_csv(dataset)
     X = df.iloc[0:len(df),0]#kms
     Y = df.iloc[0:len(df),1]#prices observed
     return [X, Y]
 
-def predict_Y(X, theta_0, theta_1) :
-    return theta_0 + (theta_1 * X)
+def predict_Y(X, theta_0, theta_1, X_set) :
+    X_norm =  (float(X) - get_min(X_set)) / (get_max(X_set) - get_min(X_set))
+    return theta_0 + (theta_1 * X_norm)
 
 def main():
     #check args for plot
@@ -39,13 +54,14 @@ def main():
         except :
             print("Not a number")
     
+    [X_set, Y_set] = get_data(*dataset)
+
     #launch predict
-    predicted_Y = predict_Y(X, theta_0, theta_1)
+    predicted_Y = predict_Y(X, theta_0, theta_1, X_set)
     print("Predicted %s is: %f" %(nameY, predicted_Y)) if predicted_Y > 0 else print("0")
 
     #plot
     if show_plot == True:
-        [X_set, Y_set] = get_data(*dataset)
         plotter = Plotter
         plotter.predict_plot(X_set, Y_set, theta_0, theta_1, X, predicted_Y)
 
