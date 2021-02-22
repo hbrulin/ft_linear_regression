@@ -29,9 +29,10 @@ def get_data(dataset) :
     m = len(X)
     return [X, Y, m]
 
-def save(theta_0, theta_1, nameX, nameY, dataset) :
+def save(thetas, names, X_range, dataset):
     with open('thetas.txt', 'w') as f:
-        f.write("%f %f\n%s %s\n%s" %(theta_0, theta_1, nameX, nameY, dataset))
+        f.write("%f %f\n%s %s\n%f %f\n%s" \
+            %(thetas[0], thetas[1], names[0], names[1], X_range[0], X_range[1], dataset))
 
 #linear_regression
 def calculate_gradiants(old_theta_0, old_theta_1, X, Y, m) :
@@ -76,30 +77,24 @@ def main():
         except :
             print("Error: File does not exist or has wrong format")
 
-    #normalize to bring data to same range between 0 and 1
-    #X_norm = [float(X[i])/get_max(X) for i in range(m)]
-    #Y_norm = [float(Y[i])/get_max(Y) for i in range(m)]
-    X_norm = (X.astype(float) - get_min(X)) / (get_max(X) - get_min(X))
+    #scale to bring data to same range between 0 and 1 - only needed for X
+    X_range = [get_min(X), get_max(X)]
+    X_scale = (X.astype(float) - X_range[0]) / (X_range[1] - X_range[0])
 
     #launch train
-    [theta_0, theta_1] = train(X_norm, Y, m)
-
-    #denormalize
-    #print(theta_0, get_max(Y))
-    #theta_0 = theta_0 * get_max(Y)
-    #print(theta_1, get_max(Y) / get_max(X))
-    #theta_1 = theta_1 * (get_max(Y) / get_max(X))
+    thetas = train(X_scale, Y, m)
 
     #result
-    print ("Results : theta_0: %f, theta_1: %f" %(theta_0, theta_1))
+    print ("Results : theta_0: %f, theta_1: %f" %(thetas[0], thetas[1]))
 
     #save
-    save(theta_0, theta_1, X.name, Y.name, dataset)
+    names = [X.name, Y.name]
+    save(thetas, names, X_range, dataset)
 
     #plot
     if show_plot == True:
         plotter = Plotter
-        plotter.train_plot(X, Y, theta_0, theta_1)
+        plotter.train_plot(X_scale, Y, thetas[0], thetas[1])
 
 if __name__ == "__main__":
     main()
