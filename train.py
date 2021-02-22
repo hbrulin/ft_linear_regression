@@ -1,38 +1,12 @@
 import sys
-import pandas as pd
 from plotter import Plotter
+from utils import Utils
 
 #global vars
 learning_rate = 0.1
 initial_theta_0 = 0.0
 initial_theta_1 = 0.0
-
-#utils
-def get_max(data) -> float:
-    tmp = 0
-    for nb in data:
-        if nb > tmp:
-            tmp = nb
-    return tmp
-
-def get_min(data) -> float:
-    tmp = 0
-    for nb in data:
-        if nb < tmp:
-            tmp = nb
-    return tmp
-
-def get_data(dataset) :
-    df = pd.read_csv(dataset)
-    X = df.iloc[0:len(df),0]#kms
-    Y = df.iloc[0:len(df),1]#prices observed
-    m = len(X)
-    return [X, Y, m]
-
-def save(thetas, names, X_range, dataset):
-    with open('thetas.txt', 'w') as f:
-        f.write("%f %f\n%s %s\n%f %f\n%s" \
-            %(thetas[0], thetas[1], names[0], names[1], X_range[0], X_range[1], dataset))
+utils = Utils
 
 #linear_regression
 def calculate_gradiants(old_theta_0, old_theta_1, X, Y, m) :
@@ -62,34 +36,29 @@ def train(X, Y, m):
 
 
 def main():
-    #check args for plot
-    show_plot = False
-    if (len(sys.argv) > 1 and sys.argv[1] == "--plot") :
-        show_plot = True
+    show_plot = utils.show_plot(sys.argv)
 
-    #load data
-    check_dataset = False
-    while check_dataset == False :
-        dataset = input("Enter path to dataset: ")
+    #getfile
+    check_file = False
+    while check_file == False :
+        filename = input("Enter path to dataset: ")
         try :
-            [X, Y, m] = get_data(dataset)
-            check_dataset = True
+            [X, Y, m] = utils.get_data(filename)
+            check_file = True
         except :
             print("Error: File does not exist or has wrong format")
 
-    #scale to bring data to same range between 0 and 1 - only needed for X
-    X_range = [get_min(X), get_max(X)]
-    X_scale = (X.astype(float) - X_range[0]) / (X_range[1] - X_range[0])
+    #scale data between 0 & 1 - only needed for X
+    X_range = [utils.get_min(X), utils.get_max(X)]
+    X_scale = utils.scale(X, X_range[0], X_range[1])
 
     #launch train
     thetas = train(X_scale, Y, m)
-
-    #result
     print ("Results : theta_0: %f, theta_1: %f" %(thetas[0], thetas[1]))
 
     #save
     names = [X.name, Y.name]
-    save(thetas, names, X_range, dataset)
+    utils.save(thetas, names, X_range, filename)
 
     #plot
     if show_plot == True:
