@@ -41,7 +41,7 @@ def main():
     
     #launch predict
     predicted_Y = predict_Y(X, theta_0, theta_1)
-    print ("Estimated %s is: %f" %(nameY, predicted_Y))
+    print("Predicted %s is: %f" %(nameY, predicted_Y)) if predicted_Y > 0 else print("0")
 
     #plot
     if show_plot == True:

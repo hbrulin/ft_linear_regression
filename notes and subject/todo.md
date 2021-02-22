@@ -3,4 +3,3 @@
 - plot où on voit la "ligne" evoluer au fil des iterations, 
 - ne pas print de valeur négatives
 - understand denormalize & open thetas
-- if thetas does not exist, print error to use first program first
