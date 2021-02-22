@@ -2,13 +2,11 @@ import sys
 from plotter import Plotter
 from utils import Utils
 
-#global vars
 learning_rate = 0.1
 initial_theta_0 = 0.0
 initial_theta_1 = 0.0
 utils = Utils
 
-#linear_regression
 def calculate_gradiants(old_theta_0, old_theta_1, X, Y, m) :
     theta_0 = 0.0
     theta_1 = 0.0
@@ -34,11 +32,7 @@ def train(X, Y, m):
         tmp_theta_1 = theta_1
     return [tmp_theta_0, tmp_theta_1]  
 
-
-def main():
-    show_plot = utils.show_plot(sys.argv)
-
-    #getfile
+def ask_for_file():
     check_file = False
     while check_file == False :
         filename = input("Enter path to dataset: ")
@@ -46,21 +40,25 @@ def main():
             [X, Y, m] = utils.get_data(filename)
             check_file = True
         except :
-            print("Error: File does not exist or has wrong format")
+            print('\33[31m' +"Error: File does not exist or has wrong format" + '\33[0m')
+    return [filename, X, Y, m]
+
+
+def main():
+    show_plot = utils.show_plot(sys.argv)
+    [filename, X, Y, m] = ask_for_file()
 
     #scale data between 0 & 1 - only needed for X
     X_range = [utils.get_min(X), utils.get_max(X)]
     X_scale = utils.scale(X, X_range[0], X_range[1])
 
-    #launch train
+    #train
     thetas = train(X_scale, Y, m)
-    print ("Results : theta_0: %f, theta_1: %f" %(thetas[0], thetas[1]))
-
+    print ('\33[32m' + "Coefficients: theta_0: %f, theta_1: %f. Run predict.py!" %(thetas[0], thetas[1]) + '\33[0m')
     #save
     names = [X.name, Y.name]
     utils.save(thetas, names, X_range, filename)
 
-    #plot
     if show_plot == True:
         plotter = Plotter
         plotter.train_plot(X_scale, Y, thetas[0], thetas[1])
