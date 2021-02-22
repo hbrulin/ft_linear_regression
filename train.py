@@ -1,6 +1,6 @@
 import sys
 import pandas as pd
-import matplotlib.pyplot as plt
+from classes import Plotter
 
 #global vars
 learning_rate = 0.1
@@ -14,16 +14,8 @@ def get_max(data) -> float:
             tmp = nb
     return tmp
 
-def plot(X, Y, theta_0, theta_1):
-    plt.scatter(X, Y)
-    plt.xlabel(X.name)
-    plt.ylabel(Y.name)
-    function = theta_0 + theta_1 * X
-    plt.plot(X, function, color='red')
-    plt.savefig('plots/train_plot.png')
-
-def get_data(filename) :
-    df = pd.read_csv(filename)
+def get_data(dataset) :
+    df = pd.read_csv(dataset)
     X = df.iloc[0:len(df),0]#kms
     Y = df.iloc[0:len(df),1]#prices observed
     m = len(X)
@@ -54,9 +46,9 @@ def train(X, Y, m):
         tmp_theta_1 = theta_1
     return [tmp_theta_0, tmp_theta_1]  
 
-def save(theta_0, theta_1, nameX, nameY) :
+def save(theta_0, theta_1, nameX, nameY, dataset) :
     with open('thetas.txt', 'w') as f:
-        f.write("%f %f\n%s %s" %(theta_0, theta_1, nameX, nameY))
+        f.write("%f %f\n%s %s\n%s" %(theta_0, theta_1, nameX, nameY, dataset))
 
 def main():
     #check args for plot
@@ -67,9 +59,9 @@ def main():
     #load data
     check_dataset = False
     while check_dataset == False :
-        filename = input("Enter path to dataset: ")
+        dataset = input("Enter path to dataset: ")
         try :
-            [X, Y, m] = get_data(filename)
+            [X, Y, m] = get_data(dataset)
             check_dataset = True
         except :
             print("Error: File does not exist or has wrong format")
@@ -89,11 +81,12 @@ def main():
     print ("Results : theta_0: %f, theta_1: %f" %(theta_0, theta_1))
 
     #save
-    save(theta_0, theta_1, X.name, Y.name)
+    save(theta_0, theta_1, X.name, Y.name, dataset)
 
     #plot
     if show_plot == True:
-        plot(X, Y, theta_0, theta_1)
+        plotter = Plotter
+        plotter.train_plot(X, Y, theta_0, theta_1)
 
 if __name__ == "__main__":
     main()
