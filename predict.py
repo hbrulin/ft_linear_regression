@@ -23,8 +23,11 @@ def main():
             theta_0, theta_1 = [float(x) for x in next(f).split()]
             nameX, nameY = [str(x) for x in next(f).split()]
             dataset = [str(x) for x in next(f).split()]
-    except:
-        sys.exit("Error: Thetas don't exist. Run train.py first.")
+    except: #for compliance with subject
+        print("thetas file doesn't exist. Running with thetas set at 0.")
+        theta_0 = theta_1 = 0
+        nameX, nameY = "km", "price"
+        dataset = ["data.csv"]
     
     #ask for input X
     X_correct = False

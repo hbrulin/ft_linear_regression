@@ -33,8 +33,8 @@ def calculate_gradiants(old_theta_0, old_theta_1, X, Y, m) :
     for i in range(0, m):
         theta_0 += float(((old_theta_0 + (old_theta_1 * X[i])) - float(Y[i])))
         theta_1 += (((old_theta_0 + (old_theta_1 * X[i]))) - float(Y[i])) * float(X[i])
-    theta_0 = (1/m) * theta_0
-    theta_1 = (1/m) * theta_1
+    theta_0 = (1/m) * theta_0 #inverse
+    theta_1 = (1/m) * theta_1 #inverse
     return [theta_0, theta_1]
 
 def get_thetas(old_theta_0, old_theta_1, X, Y, m):
