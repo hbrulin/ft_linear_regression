@@ -1,12 +1,12 @@
 import sys
+import pandas as pd
+from classes import Plotter
 
-def plot(X, Y, theta_0, theta_1, nameX, nameY):
-    plt.scatter(X, Y)
-    plt.xlabel(nameX)
-    plt.ylabel(nameY)
-    function = theta_0 + theta_1 * X
-    plt.plot(X, function, color='red')
-    plt.savefig('plots/estimate_plot.png')
+def get_data(dataset) :
+    df = pd.read_csv(dataset)
+    X = df.iloc[0:len(df),0]#kms
+    Y = df.iloc[0:len(df),1]#prices observed
+    return [X, Y]
 
 def predict_Y(X, theta_0, theta_1) :
     return theta_0 + (theta_1 * X)
@@ -22,8 +22,7 @@ def main():
         theta_0, theta_1 = [float(x) for x in next(f).split()]
         nameX, nameY = [str(x) for x in next(f).split()]
         dataset = [str(x) for x in next(f).split()]
-    print(theta_0)
-    print(*dataset)
+    
     #ask for input X
     X_correct = False
     while X_correct == False :
@@ -43,7 +42,9 @@ def main():
 
     #plot
     if show_plot == True:
-        plot(X, predicted_Y, theta_0, theta_1, nameX, nameY)
+        [X_set, Y_set] = get_data(*dataset)
+        plotter = Plotter
+        plotter.predict_plot(X_set, Y_set, theta_0, theta_1, X, predicted_Y)
 
 if __name__ == "__main__":
     main()

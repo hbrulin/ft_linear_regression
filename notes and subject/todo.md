@@ -5,3 +5,4 @@
 - Dans le predict, afficher où est le point sur un graph. C'est tout simple et ça permet d'éviter les interrogations d'au dessus
 - understand denormalize & open thetas
 - have modules
+- if thetas does not exist, print error to use first program first
