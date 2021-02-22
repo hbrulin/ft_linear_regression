@@ -1,32 +1,12 @@
 import sys
-import pandas as pd
 from plotter import Plotter
+from utils import Utils
 
-#global vars
 learning_rate = 0.1
 initial_theta_0 = 0.0
 initial_theta_1 = 0.0
+utils = Utils
 
-#utils
-def get_max(data) -> float:
-    tmp = 0
-    for nb in data:
-        if nb > tmp:
-            tmp = nb
-    return tmp
-
-def get_data(dataset) :
-    df = pd.read_csv(dataset)
-    X = df.iloc[0:len(df),0]#kms
-    Y = df.iloc[0:len(df),1]#prices observed
-    m = len(X)
-    return [X, Y, m]
-
-def save(theta_0, theta_1, nameX, nameY, dataset) :
-    with open('thetas.txt', 'w') as f:
-        f.write("%f %f\n%s %s\n%s" %(theta_0, theta_1, nameX, nameY, dataset))
-
-#linear_regression
 def calculate_gradiants(old_theta_0, old_theta_1, X, Y, m) :
     theta_0 = 0.0
     theta_1 = 0.0
@@ -52,44 +32,36 @@ def train(X, Y, m):
         tmp_theta_1 = theta_1
     return [tmp_theta_0, tmp_theta_1]  
 
+def ask_for_file():
+    check_file = False
+    while check_file == False :
+        filename = input("Enter path to dataset: ")
+        try :
+            [X, Y, m] = utils.get_data(filename)
+            check_file = True
+        except :
+            print('\33[31m' +"Error: File does not exist or has wrong format" + '\33[0m')
+    return [filename, X, Y, m]
+
 
 def main():
-    #check args for plot
-    show_plot = False
-    if (len(sys.argv) > 1 and sys.argv[1] == "--plot") :
-        show_plot = True
+    show_plot = utils.show_plot(sys.argv)
+    [filename, X, Y, m] = ask_for_file()
 
-    #load data
-    check_dataset = False
-    while check_dataset == False :
-        dataset = input("Enter path to dataset: ")
-        try :
-            [X, Y, m] = get_data(dataset)
-            check_dataset = True
-        except :
-            print("Error: File does not exist or has wrong format")
+    #scale data between 0 & 1 - only needed for X
+    X_range = [utils.get_min(X), utils.get_max(X)]
+    X_scale = utils.scale(X, X_range[0], X_range[1])
 
-    #normalize to bring data to same range between 0 and 1
-    X_norm = [float(X[i])/get_max(X) for i in range(m)]
-    Y_norm = [float(Y[i])/get_max(Y) for i in range(m)]
-
-    #launch train
-    [theta_0, theta_1] = train(X_norm, Y_norm, m)
-
-    #denormalize
-    theta_0 = theta_0 * get_max(Y)
-    theta_1 = theta_1 * (get_max(Y) / get_max(X))
-
-    #result
-    print ("Results : theta_0: %f, theta_1: %f" %(theta_0, theta_1))
-
+    #train
+    thetas = train(X_scale, Y, m)
+    print ('\33[32m' + "Coefficients: theta_0: %f, theta_1: %f. Run predict.py!" %(thetas[0], thetas[1]) + '\33[0m')
     #save
-    save(theta_0, theta_1, X.name, Y.name, dataset)
+    names = [X.name, Y.name]
+    utils.save(thetas, names, X_range, filename)
 
-    #plot
     if show_plot == True:
         plotter = Plotter
-        plotter.train_plot(X, Y, theta_0, theta_1)
+        plotter.train_plot(X_scale, Y, thetas[0], thetas[1])
 
 if __name__ == "__main__":
     main()
