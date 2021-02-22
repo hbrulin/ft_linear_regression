@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 
-def get_price(X, theta_0, theta_1) :
+def get_Y(X, theta_0, theta_1) :
     return theta_0 + (theta_1 * X)
 
 def main():
@@ -21,8 +21,8 @@ def main():
                 print("%s is negative" %nameX)
         except :
             print("Not a number")
-    estimated_price = get_price(X, theta_0, theta_1)
-    print ("Estimated %s is: %f" %(nameY, estimated_price))
+    estimated_Y = get_Y(X, theta_0, theta_1)
+    print ("Estimated %s is: %f" %(nameY, estimated_Y))
 
 if __name__ == "__main__":
     main()

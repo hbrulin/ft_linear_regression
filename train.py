@@ -20,7 +20,7 @@ def plot(X, Y, theta_0, theta_1):
     plt.ylabel(Y.name)
     function = theta_0 + theta_1 * X
     plt.plot(X, function, color='red')
-    plt.show()
+    plt.savefig('plots/train_plot.png')
 
 def get_data(filename) :
     df = pd.read_csv(filename)
