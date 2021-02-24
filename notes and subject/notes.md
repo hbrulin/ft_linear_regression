@@ -93,3 +93,7 @@ Pour minimiser cette fonction de coût, on utilise l'algorithme de descente du g
 
 #panda
 https://www.datacamp.com/community/tutorials/pandas-read-csv
+
+
+
+#Maths:
